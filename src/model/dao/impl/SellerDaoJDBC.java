@@ -135,8 +135,9 @@ public class SellerDaoJDBC implements SellerDao {
       if (rs.next()) {
         Department dep = instantiateDepartment(rs);
         return instantiateSeller(rs, dep);
+      } else {
+        throw new DbException("Id not found!");
       }
-      return null;
     } catch (SQLException e) {
       throw new DbException(e.getMessage());
     } finally {
