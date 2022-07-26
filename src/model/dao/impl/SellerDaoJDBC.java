@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Date;
 
 public class SellerDaoJDBC implements SellerDao {
 
   private Connection conn;
 
+  // ************ Constructor ***************
   public SellerDaoJDBC(Connection conn) {
     this.conn = conn;
   }
 
+  // ************ Insert ********************
   @Override
   public void insert(Seller obj) {
     PreparedStatement st = null;
@@ -59,6 +60,7 @@ public class SellerDaoJDBC implements SellerDao {
     }
   }
 
+  // ************ Update ***************
   @Override
   public void update(Seller obj) {
     PreparedStatement st = null;
@@ -86,11 +88,34 @@ public class SellerDaoJDBC implements SellerDao {
     }
   }
 
+  // ************ Delete ***************
   @Override
   public void deleteById(Integer obj) {
+    PreparedStatement st = null;
+
+    try {
+      st = conn.prepareStatement(
+          "DELETE FROM seller "
+              + "WHERE Id = ?",
+          Statement.RETURN_GENERATED_KEYS
+      );
+
+      st.setInt(1, obj);
+
+      int row = st.executeUpdate();
+
+      if(row == 0) {
+        throw new DbException("Id not found!");
+      }
+    } catch (SQLException e) {
+      throw new DbException(e.getMessage());
+    } finally {
+      DB.closeStatement(st);
+    }
 
   }
 
+  // ************ Find by Id ************
   @Override
   public Seller findById(Integer id) {
     PreparedStatement st = null;
@@ -120,6 +145,8 @@ public class SellerDaoJDBC implements SellerDao {
     }
   }
 
+
+  // ************ Instantiate of the Seller entity ******************
   private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
     Seller obj = new Seller();
     obj.setId(rs.getInt("Id"));
@@ -131,6 +158,7 @@ public class SellerDaoJDBC implements SellerDao {
     return obj;
   }
 
+  // ************ Instantiate of the Department entity ******************
   private Department instantiateDepartment(ResultSet rs) throws SQLException {
     Department dep = new Department();
     dep.setId(rs.getInt("DepartmentId"));
@@ -138,6 +166,7 @@ public class SellerDaoJDBC implements SellerDao {
     return dep;
   }
 
+  // ************ Find all *****************
   @Override
   public List<Seller> findAll() {
     PreparedStatement st = null;
@@ -174,6 +203,8 @@ public class SellerDaoJDBC implements SellerDao {
     }
   }
 
+
+  // ************ List by Department *******************
   @Override
   public List<Seller> findByDepartment(Department department) {
     PreparedStatement st = null;

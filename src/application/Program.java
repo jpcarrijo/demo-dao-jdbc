@@ -7,32 +7,34 @@ import model.entities.Seller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Program {
 
   public static void main(String[] args) {
 
+    Scanner sc = new Scanner(System.in);
     SellerDao sellerDao = DaoFactory.createSellerDao();
 
     System.out.println("===== Teste 1: seller findById =====");
-    Seller seller = sellerDao.findById(2);
+    //Seller seller = sellerDao.findById(2);
 
-    System.out.println(seller);
+    //System.out.println(seller);
 
     System.out.println("\n===== Teste 2: seller findByDepartment =====");
     Department department = new Department(2, null);
-    List<Seller> list = sellerDao.findByDepartment(department);
+    //List<Seller> list = sellerDao.findByDepartment(department);
 
-    for (Seller result : list) {
-      System.out.println(result);
-    }
+//    for (Seller result : list) {
+//      System.out.println(result);
+//    }
 
     System.out.println("\n===== Teste 3: seller findAll =====");
-    list = sellerDao.findAll();
+    //list = sellerDao.findAll();
 
-    for (Seller result : list) {
-      System.out.println(result);
-    }
+//    for (Seller result : list) {
+//      System.out.println(result);
+//    }
 
     System.out.println("\n===== Teste 4: seller insert =====");
     Seller newSeller = new Seller(null, "Lucas", "lucas@gmail.com", new Date(), 4000.00, department);
@@ -41,9 +43,17 @@ public class Program {
 
 
     System.out.println("\n===== Teste 5: seller update =====");
-    seller = sellerDao.findById(1);
-    seller.setName("Martha Rocha");
-    sellerDao.update(seller);
+    //seller = sellerDao.findById(1);
+    //seller.setName("Martha Rocha");
+    //sellerDao.update(seller);
     System.out.println("Update completed!");
+
+    System.out.println("\n===== Teste 5: seller delete =====");
+    System.out.print("Enter by id ");
+    int id = sc.nextInt();
+    sellerDao.deleteById(id);
+    System.out.println("Delete completed!");
+
+
   }
 }
